@@ -27,7 +27,11 @@ FetchContent_MakeAvailable(tracy)
 
 add_library(${PROJECT_NAME} SHARED
     src/TracyClient.cpp
-    _deps/tracy-src/TracyClient.cpp
+    ${tracy_SOURCE_DIR}/public/TracyClient.cpp
+)
+
+include_directories(
+    ${tracy_SOURCE_DIR}/public/tracy
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC TracyClient)

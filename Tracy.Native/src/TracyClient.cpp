@@ -9,15 +9,32 @@
 
 using namespace tracy;
 
-extern "C" void tracy_FrameMark() {
+#if defined(_MSC_VER)
+#    define _TRACY_EXPORT __declspec(dllexport)
+#elif defined(__GNUC__)
+#    define _TRACY_EXPORT __attribute__((visibility("default")))
+#else
+#    define _TRACY_EXPORT
+#    pragma warning "Unknown dynamic link import/export semantics."
+#endif
+
+#ifdef __cplusplus
+#    define _TRACY_EXTERN extern "C"
+#else
+#    define _TRACY_EXTERN extern
+#endif
+
+#define TRACY_CAPI _TRACY_EXTERN _TRACY_EXPORT
+
+TRACY_CAPI void tracy_FrameMark() {
     FrameMark;
 }
 
-extern "C" void tracy_ZoneScoped() {
+TRACY_CAPI void tracy_ZoneScoped() {
 //    ZoneScoped;
 }
 
-extern "C" void tracy_ZoneBegin() {
+TRACY_CAPI void tracy_ZoneBegin() {
 
 //    const auto srcloc = Profiler::AllocSourceLocation( 0, "xerg", "xerg2", "XERG3", 4);
 
@@ -27,7 +44,7 @@ extern "C" void tracy_ZoneBegin() {
     TracyQueueCommit(zoneBeginThread);
 }
 
-extern "C" void tracy_ZoneName( const char* name, int nameLength) {
+TRACY_CAPI void tracy_ZoneName( const char* name, int nameLength) {
     auto ptr = (char*)tracy_malloc( nameLength );
     memcpy( ptr, name, nameLength );
 
@@ -37,7 +54,7 @@ extern "C" void tracy_ZoneName( const char* name, int nameLength) {
     TracyQueueCommit( zoneTextFatThread );
 }
 
-extern "C" void tracy_ZoneEnd() {
+TRACY_CAPI void tracy_ZoneEnd() {
     TracyQueuePrepare(QueueType::ZoneEnd);
     MemWrite( &item->zoneEnd.time, Profiler::GetTime() );
     TracyQueueCommit(zoneBeginThread);

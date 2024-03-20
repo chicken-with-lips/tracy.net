@@ -1,15 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <LangVersion>11</LangVersion>
     </PropertyGroup>
 
     <ItemGroup Condition="'$(Configuration)' == 'Debug' AND '$(OS)' == 'Unix'">
-        <ContentWithTargetPath Include="..\Tracy.Native\bin\Debug\Tracy.Native.so">
+        <ContentWithTargetPath Include="..\Tracy.Native\cmake-build-debug\lib\libTracy.Native.so">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>Tracy.Native.so</TargetPath>
+            <TargetPath>libTracy.Native.so</TargetPath>
         </ContentWithTargetPath>
     </ItemGroup>
 
@@ -21,9 +22,9 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)' == 'Release' AND '$(OS)' == 'Unix'">
-        <ContentWithTargetPath Include="..\Tracy.Native\bin\Release\Tracy.Native.so">
+        <ContentWithTargetPath Include="..\Tracy.Native\cmake-build-release\lib\libTracy.Native.so">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>Tracy.Native.so</TargetPath>
+            <TargetPath>libTracy.Native.so</TargetPath>
         </ContentWithTargetPath>
     </ItemGroup>
 

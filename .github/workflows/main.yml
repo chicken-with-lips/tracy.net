@@ -59,8 +59,14 @@ jobs:
       - name: Build Tracy (Debug)
         run: dotnet build -c Debug --no-restore Tracy
 
+      - name: Copy Tracy.Native (Debug)
+        run: cp Tracy.Native/builds/ninja-multi-vcpkg/bin/Debug/*.dll Tracy/bin/Debug/net8.0
+
       - name: Build Tracy (Release)
         run: dotnet build -c Release --no-restore Tracy
+
+      - name: Copy Tracy.Native (Release)
+        run: cp Tracy.Native/builds/ninja-multi-vcpkg/bin/Debug/*.dll Tracy/bin/Debug/net8.0
 
       - uses: actions/upload-artifact@v4
         with:
@@ -68,4 +74,3 @@ jobs:
           if-no-files-found: error
           path: |
             Tracy/bin
-            Tracy.Native/

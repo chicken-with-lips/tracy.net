@@ -40,9 +40,9 @@ jobs:
       - name: Setup anew (or from cache) vcpkg (and does not build any package)
         uses: lukka/run-vcpkg@v11
         with:
-          setupOnly: true
           vcpkgGitCommitId: '${{ matrix.vcpkgCommitId}}'
           vcpkgTriplet: ${{ matrix.triplet }}
+          vcpkgJsonGlob: '**/Tracy.Native/vcpkg.json'
         
       - name: Run CMake consuming CMakePreset.json and run vcpkg to build packages
         uses: lukka/run-cmake@v10
@@ -51,6 +51,5 @@ jobs:
           # CMakePresets.json. Change if you need have CMakeLists.txt and CMakePresets.json
           # located elsewhere.
            cmakeListsTxtPath: '${{ github.workspace }}/Tracy.Native/CMakeLists.txt'
-#           configurePreset: ninja-multi-vcpkg
-#           buildPreset: ninja-multi-vcpkg
-           useVcpkgToolchainFile: cmakeListsTxtPath
+           configurePreset: ninja-multi-vcpkg
+           buildPreset: ninja-multi-vcpkg

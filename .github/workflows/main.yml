@@ -57,10 +57,10 @@ jobs:
         run: dotnet restore Tracy
 
       - name: Build Tracy (Debug)
-        run: dotnet build -C Debug --no-restore Tracy
+        run: dotnet build -c Debug --no-restore Tracy
 
       - name: Build Tracy (Release)
-        run: dotnet build -C Release --no-restore Tracy
+        run: dotnet build -c Release --no-restore Tracy
 
       - uses: actions/upload-artifact@v4
         with:

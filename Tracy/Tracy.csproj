@@ -8,7 +8,7 @@
         <AssemblyName>Tracy</AssemblyName>
         <RootNamespace>Tracy</RootNamespace>
     </PropertyGroup>
-
+<!--
     <ItemGroup Condition="'$(Configuration)' == 'Debug' AND '$(OS)' == 'Unix'">
         <ContentWithTargetPath Include="..\Tracy.Native\cmake-build-debug\lib\libTracy.Native.so">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -36,5 +36,5 @@
             <TargetPath>Tracy.Native.dll</TargetPath>
         </ContentWithTargetPath>
     </ItemGroup>
-
+-->
 </Project>

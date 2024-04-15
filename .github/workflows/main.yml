@@ -47,11 +47,6 @@ jobs:
           configurePreset: ninja-multi-vcpkg
           buildPreset: ninja-multi-vcpkg
 
-      - name: pwd
-        run: pwd
-      - name: ls
-        run: ls -l
-
       - name: Restore Tracy.Net
         run: dotnet restore Tracy.Net
 
@@ -63,4 +58,4 @@ jobs:
           name: my-artifact
           if-no-files-found: error
           path: |
-            bin\${{ matrix.build_type }}\Tracy.Native.dll
+            Tracy/bin/${{ matrix.build_type }}/net8.0/Tracy.dll

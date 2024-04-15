@@ -19,6 +19,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: true
+          # This is useful to avoid https://github.com/microsoft/vcpkg/issues/25349
+          # which is caused by missing Git history on the vcpkg submodule which ports 
+          # try to access. 
+          # Do not use if not needed, since it slows down the checkout of sources.
+          fetch-depth: 0
 
 #      - name: Setup cmake
 #        uses: jwlawson/actions-setup-cmake@v2

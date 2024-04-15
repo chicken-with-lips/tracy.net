@@ -21,27 +21,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-#      - name: Setup cmake
-#        uses: jwlawson/actions-setup-cmake@v2
-#        with:
-#          cmake-version: "3.16.x"
-
-#      - name: Use cmake
-#        run: cmake -S Tracy.Native
-
-#      - name: Configure and Build Project
-#        uses: threeal/cmake-action@main
-#        with:
-#          source-dir: Tracy.Native
-
-
       - uses: lukka/get-cmake@latest
 
       - name: Setup anew (or from cache) vcpkg (and does not build any package)
         uses: lukka/run-vcpkg@v11
         with:
           vcpkgGitCommitId: '${{ matrix.vcpkgCommitId}}'
-          vcpkgTriplet: ${{ matrix.triplet }}
           vcpkgJsonGlob: '**/Tracy.Native/vcpkg.json'
         
       - name: Run CMake consuming CMakePreset.json and run vcpkg to build packages
@@ -53,3 +38,9 @@ jobs:
            cmakeListsTxtPath: '${{ github.workspace }}/Tracy.Native/CMakeLists.txt'
            configurePreset: ninja-multi-vcpkg
            buildPreset: ninja-multi-vcpkg
+        
+      - uses: actions/upload-artifact@v4
+        with:
+          name: my-artifact
+          path: |
+            bin\${matrix.build_type}\Tracy.Native.dll

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Tracy.Net;
+namespace Tracy;
 
 public static class TracyClient
 {

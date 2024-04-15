@@ -5,6 +5,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>11</LangVersion>
+        <AssemblyName>Tracy</AssemblyName>
+        <RootNamespace>Tracy</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup Condition="'$(Configuration)' == 'Debug' AND '$(OS)' == 'Unix'">

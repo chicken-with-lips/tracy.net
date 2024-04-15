@@ -1,6 +1,8 @@
 name: Build
 on:
   push:
+    branches: [ $default-branch ]
+
 jobs:
   build:
     name: Build Project
@@ -21,15 +23,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: lukka/get-cmake@latest
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
 
-      - name: Setup anew (or from cache) vcpkg (and does not build any package)
+      - name: Setup CMake
+        uses: lukka/get-cmake@latest
+
+      - name: Setup vcpkg
         uses: lukka/run-vcpkg@v11
         with:
           vcpkgGitCommitId: '${{ matrix.vcpkgCommitId}}'
           vcpkgJsonGlob: '**/Tracy.Native/vcpkg.json'
-        
-      - name: Run CMake consuming CMakePreset.json and run vcpkg to build packages
+
+      - name: Build Tracy.Native
         uses: lukka/run-cmake@v10
         with:
           # This is the default path to the CMakeLists.txt along side the
@@ -38,7 +46,16 @@ jobs:
            cmakeListsTxtPath: '${{ github.workspace }}/Tracy.Native/CMakeLists.txt'
            configurePreset: ninja-multi-vcpkg
            buildPreset: ninja-multi-vcpkg
-        
+      
+      - run: pwd
+      - run: ls -l
+
+      - name: Restore Tracy.Net
+        run: dotnet restore Tracy.Net
+
+      - name: Build Tracy.Net
+        run: dotnet build --no-restore Tracy.Net
+
       - uses: actions/upload-artifact@v4
         with:
           name: my-artifact

@@ -16,8 +16,8 @@ jobs:
           - os: windows-latest
             vcpkgCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
             triplet: x64-windows
-#          - os: ubuntu-latest
-#            vcpkgCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
+    #          - os: ubuntu-latest
+    #            vcpkgCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
 
     steps:
       - name: Checkout
@@ -43,12 +43,14 @@ jobs:
           # This is the default path to the CMakeLists.txt along side the
           # CMakePresets.json. Change if you need have CMakeLists.txt and CMakePresets.json
           # located elsewhere.
-           cmakeListsTxtPath: '${{ github.workspace }}/Tracy.Native/CMakeLists.txt'
-           configurePreset: ninja-multi-vcpkg
-           buildPreset: ninja-multi-vcpkg
-      
-      - run: pwd
-      - run: ls -l
+          cmakeListsTxtPath: '${{ github.workspace }}/Tracy.Native/CMakeLists.txt'
+          configurePreset: ninja-multi-vcpkg
+          buildPreset: ninja-multi-vcpkg
+
+      - name: pwd
+        run: pwd
+      - name: ls
+        run: ls -l
 
       - name: Restore Tracy.Net
         run: dotnet restore Tracy.Net

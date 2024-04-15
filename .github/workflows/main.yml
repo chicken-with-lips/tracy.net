@@ -1,0 +1,50 @@
+name: Build
+on:
+  push:
+jobs:
+  build:
+    name: Build Project
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
+        build_type: [ Debug ]
+        include:
+          - os: windows-latest
+            vcpkgCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
+          - os: ubuntu-latest
+            vcpkgCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+#      - name: Setup cmake
+#        uses: jwlawson/actions-setup-cmake@v2
+#        with:
+#          cmake-version: "3.16.x"
+
+#      - name: Use cmake
+#        run: cmake -S Tracy.Native
+
+#      - name: Configure and Build Project
+#        uses: threeal/cmake-action@main
+#        with:
+#          source-dir: Tracy.Native
+
+
+      - name: Setup anew (or from cache) vcpkg (and does not build any package)
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgGitCommitId: '${{ matrix.vcpkgCommitId}}'
+        
+      - name: Run CMake consuming CMakePreset.json and run vcpkg to build packages
+        uses: lukka/run-cmake@v10
+        with:
+          # This is the default path to the CMakeLists.txt along side the
+          # CMakePresets.json. Change if you need have CMakeLists.txt and CMakePresets.json
+          # located elsewhere.
+           cmakeListsTxtPath: '${{ github.workspace }}/Tracy.Native/CMakeLists.txt'
+           configurePreset: ninja-multi-vcpkg
+           buildPreset: ninja-multi-vcpkg

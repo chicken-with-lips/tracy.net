@@ -48,10 +48,10 @@ jobs:
           buildPreset: ninja-multi-vcpkg
 
       - name: Restore Tracy.Net
-        run: dotnet restore Tracy.Net
+        run: dotnet restore Tracy
 
       - name: Build Tracy.Net
-        run: dotnet build --no-restore Tracy.Net
+        run: dotnet build --no-restore Tracy
 
       - uses: actions/upload-artifact@v4
         with:

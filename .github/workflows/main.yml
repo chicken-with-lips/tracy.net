@@ -11,7 +11,6 @@ jobs:
     strategy:
       matrix:
         os: [ windows-latest ]
-        build_type: [ Debug ]
         include:
           - os: windows-latest
             vcpkgCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
@@ -28,6 +27,16 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.nuget/packages
+            ~/.local/share/NuGet/v3-cache
+          key: ${{ runner.os }}-v1-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-v1-nuget-
+
       - name: Setup CMake
         uses: lukka/get-cmake@latest
 
@@ -40,22 +49,23 @@ jobs:
       - name: Build Tracy.Native
         uses: lukka/run-cmake@v10
         with:
-          # This is the default path to the CMakeLists.txt along side the
-          # CMakePresets.json. Change if you need have CMakeLists.txt and CMakePresets.json
-          # located elsewhere.
           cmakeListsTxtPath: '${{ github.workspace }}/Tracy.Native/CMakeLists.txt'
           configurePreset: ninja-multi-vcpkg
           buildPreset: ninja-multi-vcpkg
 
-      - name: Restore Tracy.Net
+      - name: Restore Tracy
         run: dotnet restore Tracy
 
-      - name: Build Tracy.Net
-        run: dotnet build --no-restore Tracy
+      - name: Build Tracy (Debug)
+        run: dotnet build -C Debug --no-restore Tracy
+
+      - name: Build Tracy (Release)
+        run: dotnet build -C Release --no-restore Tracy
 
       - uses: actions/upload-artifact@v4
         with:
-          name: my-artifact
+          name: ${{ matrix.os }}
           if-no-files-found: error
           path: |
-            Tracy/bin/${{ matrix.build_type }}/net8.0/Tracy.dll
+            Tracy/bin
+            Tracy.Native/

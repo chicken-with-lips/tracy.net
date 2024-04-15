@@ -53,4 +53,4 @@ jobs:
            cmakeListsTxtPath: '${{ github.workspace }}/Tracy.Native/CMakeLists.txt'
 #           configurePreset: ninja-multi-vcpkg
 #           buildPreset: ninja-multi-vcpkg
-           useVcpkgToolchainFile: true
+           useVcpkgToolchainFile: cmakeListsTxtPath

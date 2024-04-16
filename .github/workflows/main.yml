@@ -13,7 +13,7 @@ jobs:
         os: [ windows ]
         configuration: [ Debug, Release ]
         architecture: [ x64 ]
-        preset: [ ninja-multi-vcpkg ]
+        preset: ninja-multi-vcpkg
         include:
           - os: windows-latest
             vcpkgCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'

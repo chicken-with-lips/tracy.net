@@ -10,11 +10,11 @@ jobs:
 
     strategy:
       matrix:
-        os: [ windows ]
+        os: [ windows-latest ]
         configuration: [ Debug, Release ]
         architecture: [ x64 ]
         include:
-          - os: windows
+          - os: windows-latest
             vcpkgCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
             triplet: win-x64
             preset: 'ninja-multi-vcpkg'

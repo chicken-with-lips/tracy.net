@@ -10,11 +10,13 @@ jobs:
 
     strategy:
       matrix:
-        os: [ windows-latest ]
+        os: [ windows ]
+        configuration: [ Debug, Release ]
+        architecture: [ x64 ]
         include:
           - os: windows-latest
             vcpkgCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
-            triplet: x64-windows
+            triplet: win-x64
     #          - os: ubuntu-latest
     #            vcpkgCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
 
@@ -26,16 +28,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
-
-      - name: Cache NuGet packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.nuget/packages
-            ~/.local/share/NuGet/v3-cache
-          key: ${{ runner.os }}-v1-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: |
-            ${{ runner.os }}-v1-nuget-
 
       - name: Setup CMake
         uses: lukka/get-cmake@latest
@@ -50,27 +42,21 @@ jobs:
         uses: lukka/run-cmake@v10
         with:
           cmakeListsTxtPath: '${{ github.workspace }}/Tracy.Native/CMakeLists.txt'
-          configurePreset: ninja-multi-vcpkg
-          buildPreset: ninja-multi-vcpkg
+          configurePreset: ${{ matrix.preset }}
+          buildPreset: ${{ matrix.preset }}
 
       - name: Restore Tracy
         run: dotnet restore Tracy
 
-      - name: Build Tracy (Debug)
-        run: dotnet build -c Debug --no-restore Tracy
+      - name: Build Tracy
+        run: dotnet build -c ${{ matrix.configuration }} --no-restore Tracy
 
-      - name: Copy Tracy.Native (Debug)
-        run: cp Tracy.Native/builds/ninja-multi-vcpkg/bin/Debug/*.dll Tracy/bin/Debug/net8.0
-
-      - name: Build Tracy (Release)
-        run: dotnet build -c Release --no-restore Tracy
-
-      - name: Copy Tracy.Native (Release)
-        run: cp Tracy.Native/builds/ninja-multi-vcpkg/bin/Debug/*.dll Tracy/bin/Debug/net8.0
+      - name: Copy Tracy.Native
+        run: cp Tracy.Native/builds/${{ matrix.preset }}/bin/${{ matrix.configuration }}/*.dll Tracy/bin/${{ matrix.configuration }}/net8.0/runtimes/${{ matrix.triplet }}/native
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }}
+          name: ${{ matrix.os }}_${{ matrix.configuration }}_${{ matrix.architecture }}
           if-no-files-found: error
           path: |
-            Tracy/bin
+            Tracy/bin/**/*

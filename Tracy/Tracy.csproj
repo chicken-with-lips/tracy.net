@@ -7,6 +7,12 @@
         <LangVersion>11</LangVersion>
         <AssemblyName>Tracy</AssemblyName>
         <RootNamespace>Tracy</RootNamespace>
+        <Version>0.0.1</Version>
+        <Authors>Chicken with Lips</Authors>
+        <PackageProjectUrl>https://github.com/chicken-with-lips</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/chicken-with-lips/tracy.net/blob/main/LICENSE</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/chicken-with-lips</RepositoryUrl>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
 <!--
     <ItemGroup Condition="'$(Configuration)' == 'Debug' AND '$(OS)' == 'Unix'">

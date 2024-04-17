@@ -1,0 +1,62 @@
+name: Build
+on:
+  push:
+#    branches: [ $default-branch ]
+
+jobs:
+  build:
+    name: Build Project
+    runs-on: ${{ matrix.os }}-latest
+
+    strategy:
+      matrix:
+        os: [ windows ]
+        configuration: [ Release ]
+#        configuration: [ Debug, Release ]
+        architecture: [ x64 ]
+        include:
+          - os: windows
+            vcpkgCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
+            triplet: win-x64
+            #          - os: ubuntu-latest
+    #            vcpkgCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Setup CMake
+        uses: lukka/get-cmake@latest
+        with:
+          useLocalCache: true
+
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgGitCommitId: '${{ matrix.vcpkgCommitId}}'
+          vcpkgJsonGlob: '**/Tracy.Native/vcpkg.json'
+
+      - name: Build Tracy.Native
+        uses: lukka/run-cmake@v10
+        with:
+          cmakeListsTxtPath: '${{ github.workspace }}/Tracy.Native/CMakeLists.txt'
+          configurePreset: ${{ matrix.configuration }}
+          buildPreset: ${{ matrix.configuration }}
+
+      - name: Restore Tracy
+        run: dotnet restore Tracy
+
+      - name: Build Tracy
+        run: dotnet build -c ${{ matrix.configuration }} --no-restore Tracy
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.os }}_${{ matrix.configuration }}_${{ matrix.architecture }}
+          if-no-files-found: error
+          path: |
+            Tracy/bin/**/*

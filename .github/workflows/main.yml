@@ -4,8 +4,8 @@ on:
 #    branches: [ $default-branch ]
 
 jobs:
-  build:
-    name: Build Project
+  build-native:
+    name: Build Tracy.Native
     runs-on: ${{ matrix.os }}-latest
 
     strategy:
@@ -41,12 +41,54 @@ jobs:
           vcpkgGitCommitId: '${{ matrix.vcpkgCommitId}}'
           vcpkgJsonGlob: '**/Tracy.Native/vcpkg.json'
 
-      - name: Build Tracy.Native
+      - name: Compile
         uses: lukka/run-cmake@v10
         with:
           cmakeListsTxtPath: '${{ github.workspace }}/Tracy.Native/CMakeLists.txt'
           configurePreset: ${{ matrix.configuration }}
           buildPreset: ${{ matrix.configuration }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.os }}_${{ matrix.configuration }}_${{ matrix.architecture }}
+          if-no-files-found: error
+          path: |
+            Tracy.Native/bin/**/*
+
+  build-dotnet:
+    name: Build Tracy.NET
+    runs-on: ${{ matrix.os }}-latest
+    needs: build-native
+
+    strategy:
+      matrix:
+        os: [ windows ]
+        configuration: [ Release ]
+#        configuration: [ Debug, Release ]
+        architecture: [ x64 ]
+        include:
+          - os: windows
+            vcpkgCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
+            triplet: win-x64
+            #          - os: ubuntu-latest
+    #            vcpkgCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Tracy.Native
+        uses: actions/download-artifact@v4
+        with:
+          path: downloaded_artifacts
+
+      - name: ls
+        run: ls -l downloaded_artifacts
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
 
       - name: Restore Tracy
         run: dotnet restore Tracy

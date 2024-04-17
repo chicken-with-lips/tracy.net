@@ -14,33 +14,32 @@
         <RepositoryUrl>https://github.com/chicken-with-lips</RepositoryUrl>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
-<!--
+
     <ItemGroup Condition="'$(Configuration)' == 'Debug' AND '$(OS)' == 'Unix'">
-        <ContentWithTargetPath Include="..\Tracy.Native\cmake-build-debug\lib\libTracy.Native.so">
+        <ContentWithTargetPath Include="..\Tracy.Native\builds\debug\bin\Tracy.Native.so">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>libTracy.Native.so</TargetPath>
+            <TargetPath>runtimes/linux-x64/native/Tracy.Native.so</TargetPath>
         </ContentWithTargetPath>
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)' == 'Debug' AND '$(OS)' == 'Windows_NT'">
-        <ContentWithTargetPath Include="..\Tracy.Native\bin\Debug\Tracy.Native.dll">
+        <ContentWithTargetPath Include="..\Tracy.Native\builds\debug\bin\Tracy.Native.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>Tracy.Native.dll</TargetPath>
+            <TargetPath>runtimes/win-x64/native/Tracy.Native.dll</TargetPath>
         </ContentWithTargetPath>
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)' == 'Release' AND '$(OS)' == 'Unix'">
-        <ContentWithTargetPath Include="..\Tracy.Native\cmake-build-release\lib\libTracy.Native.so">
+        <ContentWithTargetPath Include="..\Tracy.Native\builds\release\bin\Tracy.Native.so">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>libTracy.Native.so</TargetPath>
+            <TargetPath>runtimes/linux-x64/native/Tracy.Native.so</TargetPath>
         </ContentWithTargetPath>
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)' == 'Release' AND '$(OS)' == 'Windows_NT'">
-        <ContentWithTargetPath Include="..\Tracy.Native\bin\Release\Tracy.Native.dll">
+        <ContentWithTargetPath Include="..\Tracy.Native\builds\release\bin\Tracy.Native.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>Tracy.Native.dll</TargetPath>
+            <TargetPath>runtimes/win-x64/native/Tracy.Native.dll</TargetPath>
         </ContentWithTargetPath>
     </ItemGroup>
--->
 </Project>

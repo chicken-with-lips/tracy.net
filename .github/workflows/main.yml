@@ -48,7 +48,7 @@ jobs:
           name: ${{ matrix.os }}_${{ matrix.configuration }}_${{ matrix.architecture }}
           if-no-files-found: error
           path: |
-            Tracy.Native/builds/**/*
+            Tracy.Native/builds/**/bin/*
 
   build-dotnet:
     name: Build Tracy.NET

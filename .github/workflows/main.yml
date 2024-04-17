@@ -80,6 +80,9 @@ jobs:
       - name: ls
         run: ls -l downloaded_artifacts
 
+      - name: ls
+        run: ls -l downloaded_artifacts/*Release*/
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
